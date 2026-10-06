@@ -1,9 +1,11 @@
 import { renderHomePage } from "./pages/home";
 import { renderLoginPage } from "./pages/login";
+import {renderRegisterPage} from "./pages/register";
 
 const routes = {
   "/login": renderLoginPage,
   "/home": renderHomePage,
+  "/register": renderRegisterPage,
 };
 
 const app = document.getElementById("app");

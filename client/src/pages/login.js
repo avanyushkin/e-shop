@@ -11,7 +11,7 @@ export function renderLoginPage(container) {
         <label for = "password">password</label>
         <input id = "password" name = "password" type = "password" />
 
-        <button type = "redirect">register</button>
+        <button type = "button" id = "register-button">register</button>
         <button type = "submit">login</button>
 
         <p class = "form-error" role = "alert"></p>
@@ -21,7 +21,11 @@ export function renderLoginPage(container) {
 
     const form = container.querySelector("#login-form");
     const errorEl = container.querySelector(".form-error");
-    const submitButton = form.querySelector("button[type='submit']");
+    const registerButton = container.querySelector("#register-button");
+
+    registerButton.addEventListener("click", () => {
+        navigate("/register");
+    });
 
     form.addEventListener("submit", async (event) => {
         event.preventDefault();
