@@ -1,34 +1,51 @@
-import {fakeAuthenticate} from "../utils/auth";
-import { navigate } from "../main";
+import auth from "../utils/auth";
+import {validatePassword, validateUsername} from "../utils/registerValidation";
+import {navigate} from "../main";
 
 export function renderLoginPage(container) {
-  container.innerHTML = `
-    <form id = "login-form">
-      <label for = "username">username</label>
-      <input id = "username" name = "username" type = "text" />
+    container.innerHTML = `
+      <form id = "login-form">
+        <label for = "username">username</label>
+        <input id = "username" name = "username" type = "text" />
 
-      <label for = "password">password</label>
-      <input id = "password" name = "password" type = "password" />
+        <label for = "password">password</label>
+        <input id = "password" name = "password" type = "password" />
 
-      <button type = "submit">log in</button>
-      <p class = "form-error"></p>
-      <a href = "/register">register an account</a>
-    </form>
-  `;
+        <button type = "redirect">register</button>
+        <button type = "submit">login</button>
 
-  const form = container.querySelector("#login-form");
-  const errorEl = container.querySelector(".form-error");
+        <p class = "form-error" role = "alert"></p>
+        <button>continue with google</button>
+      </form>
+    `;
 
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const data = new FormData(form);
-    const username = data.get("username").trim();
-    const password = data.get("password");
+    const form = container.querySelector("#login-form");
+    const errorEl = container.querySelector(".form-error");
+    const submitButton = form.querySelector("button[type='submit']");
 
-    if (fakeAuthenticate(username, password)) {
-      navigate("/home");
-    } else {
-      errorEl.textContent = "invalid username or password";
-    }
-  });
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const username = form.username.value;
+        const password = form.password.value;
+
+        // const error = validateUsername(username) || validatePassword(password);
+        // if (error) {
+        //     errorEl.textContent = error;
+        //     return;
+        // }
+        
+        //console.log("login with", username, password);
+        try {
+            const result = await auth.login(username, password);
+            console.log("login result:", result);
+            if (!result.ok) {
+                errorEl.textContent = result.error;
+                return;
+            }
+            //console.log("login successful");
+            navigate("/home");
+        } catch (error) {
+            errorEl.textContent = "failed to login";
+        }
+    });
 }

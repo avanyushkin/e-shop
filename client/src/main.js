@@ -16,7 +16,7 @@ export function navigate(path) {
 function render() {
   const path = location.pathname === "/" ? "/home" : location.pathname;
   const page = routes[path] ?? renderLoginPage;
-  app.interHTML = "";
+  app.innerHTML = "";
   page(app);
 }
 

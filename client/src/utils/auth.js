@@ -1,5 +1,10 @@
-import {testUsers} from "../fake-data/test-users";
-
-export function fakeAuthenticate(login, password) {
-  return testUsers.some((it) => it.login === login && it.password == password);
+async function login(username, password) {
+    const response = await fetch("/login", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({username, password}),
+    });
+    return response.json();
 }
+
+export default {login};
