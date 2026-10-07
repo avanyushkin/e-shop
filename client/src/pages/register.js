@@ -1,4 +1,5 @@
 import { navigate } from "../main.js";
+import { validateConfirmPassword, validateEmail, validatePassword, validateUsername } from "../utils/registerValidation.js";
 
 export function renderRegisterPage(container) {
     container.innerHTML = `
@@ -26,5 +27,26 @@ export function renderRegisterPage(container) {
     const loginButton = container.querySelector("#login-button");
     loginButton.addEventListener("click", () => {
         navigate("/login");
+    });
+
+    const form = container.querySelector("#register-form");
+    const errorEl = container.querySelector(".form-error");
+
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const name = form.name.value;
+        const email = form.email.value;
+        const password = form.password.value;
+        const confirmPassword = form["confirm-password"].value;
+
+        const error = validateUsername(name) ||
+            validatePassword(password) ||
+            validateEmail(email) ||
+            validateConfirmPassword(password, confirmPassword);
+        if (error) {
+            errorEl.textContent = error;
+            return;
+        }
+        
     })
 }

@@ -1,29 +1,30 @@
 import express from "express";
-import fs from "node:fs/promises";
-
-const usersFile = new URL("../data/users.json", import.meta.url);
-
-async function readUsers() {
-    const text = await fs.readFile(usersFile, "utf-8");
-    return JSON.parse(text);
-}
+import bcrypt from "bcryptjs";
+import { findUserByLogin } from "../utils/userStore.js";
 
 const router = express.Router();
 
-const mock_users = await readUsers();
+router.post("/login", async (req, res) => {
+    const { login, password } = req.body ?? {};
 
-router.post("/login", (req, res) => {
-    const { username, password } = req.body ?? {};
-
-    if (typeof username !== "string" || typeof password !== "string") {
+    if (typeof login !== "string" || typeof password !== "string") {
         return res.status(400).json({ok: false, error: "invalid request data"});
     }
 
-    const user = mock_users.find((it) => it.username === username && it.password === password);
+    const user = await findUserByLogin(login);
     if (!user) {
         return res.status(401).json({ok: false, error: "invalid password or username"});
     }
-    return res.status(200).json({ok: true, user: {username: user.username}});
+    const isValid = await bcrypt.compare(password, user.passwordHash);
+    if (!isValid) {
+        return res.status(401).json({ok: false, error: "invalid password or username"});
+    }
+
+    return res.status(200).json({ok: true, userId: user.id, login: user.login});
 });
+
+router.post("/email", (req, res) => {
+
+})
 
 export default router;

@@ -8,7 +8,7 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.send("hello world!");
 });
-app.use(authRouter);
+app.use("/api", authRouter);
 
 app.listen(port, () => {
   console.log(`server is listening on port ${port}`);

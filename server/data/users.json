@@ -1,4 +1,10 @@
 [
-  {"username": "avanyushkin", "password": "avanyushkin123"},
-  {"username": "admin", "password": "admin123"}
+  {
+    "id": "1",
+    "login": "avanyushkin",
+    "telegram": "avanyushkin",
+    "passwordHash": "$2b$10$BMaDRIt8Bn0sCYUQ./ZlPe7yvfBAouyvJ7dUScfcP4BdSRj9vY4PC",
+    "about": "",
+    "createdAt": "2026-10-07T00:00:00.000Z"
+  }
 ]

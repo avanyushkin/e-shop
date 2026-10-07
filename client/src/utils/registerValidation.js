@@ -11,6 +11,25 @@ function validateUsername(value) {
     return null;
 }
 
+function validateEmail(value) {
+    if (value.length === 0) {
+        return "Email is required";
+    }
+    if (value.length > 254) {
+        return "Email must be at most 254 characters";
+    }
+    if (/\s/.test(value)) {
+        return "Email must not contain spaces";
+    }
+    if (!/^[^@]+@[^@]+$/.test(value)) {
+        return "Email must contain a single @ symbol";
+    }
+    if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value)) {
+        return "Enter a valid email address";
+    }
+    return null;
+}
+
 function validatePassword(value) {
     if (value.length < 8 || value.length > 20) {
         return "Password must be between 8 and 20 characters";
@@ -21,4 +40,8 @@ function validatePassword(value) {
     return null;
 }
 
-export { validateUsername, validatePassword };
+function validateConfirmPassword(password, confirmPassword) {
+    return password === confirmPassword ? null : "Passwords do not match";
+}
+
+export { validateUsername, validateEmail, validatePassword, validateConfirmPassword };
