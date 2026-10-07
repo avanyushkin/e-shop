@@ -1,11 +1,16 @@
 import { renderHomePage } from "./pages/home";
 import { renderLoginPage } from "./pages/login";
 import {renderRegisterPage} from "./pages/register";
+import {renderShopPage} from "./pages/shop";
+import {renderContanctsPage} from "./pages/contacts";
+import {renderNotFoundPage} from "./pages/notFound";
 
 const routes = {
-  "/login": renderLoginPage,
-  "/home": renderHomePage,
-  "/register": renderRegisterPage,
+  "/login": {render: renderLoginPage, access: "guest"},
+  "/home": {render: renderHomePage, access: "private"},
+  "/register": {render: renderRegisterPage, access: "guest"},
+  "/shop": {render: renderShopPage, access: "private"},
+  "/contacts": {render: renderContanctsPage, access: "private"},
 };
 
 const app = document.getElementById("app");
@@ -17,9 +22,9 @@ export function navigate(path) {
 
 function render() {
   const path = location.pathname === "/" ? "/home" : location.pathname;
-  const page = routes[path] ?? renderLoginPage;
+  const route = routes[path] ?? {render: renderNotFoundPage, access: "public"};
   app.innerHTML = "";
-  page(app);
+  route.render(app);
 }
 
 window.addEventListener("popstate", render);
